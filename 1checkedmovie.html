@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movies Website</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+#movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+  margin-top: 20px;
+}
+
+.movie {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+  </style>
+</head>
+<body>
+    <h1>Popular Movies</h1>
+    <input type="text" id="searchInput" placeholder="Search for a movie">
+    <button onclick="searchMovies()">Search</button>
+    <div id="movies"></div>
+    
+  
+    <script>
+        const TMDB_API_KEY = 'aed2785d44ea6363ffa84dcec8e6cf6a';
+const moviesContainer = document.getElementById('movies');
+
+fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_API_KEY}`)
+  .then(response => response.json())
+  .then(data => {
+    const movies = data.results;
+    movies.forEach(movie => {
+      const movieElement = document.createElement('div');
+      movieElement.classList.add('movie');
+
+      const movieImage = document.createElement('img');
+      movieImage.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+      movieImage.alt = movie.title;
+      
+      movieElement.appendChild(movieImage);
+      moviesContainer.appendChild(movieElement);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+  function searchMovies() {
+
+    moviesContainer.innerHTML=""
+    // Get the search input value
+    var searchInput = document.getElementById('searchInput').value;
+    fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=aed2785d44ea6363ffa84dcec8e6cf6a&query=${searchInput}`)
+        .then(response => response.json())
+  .then(data => {
+    const movies = data.results;
+    movies.forEach(movie => {
+      const movieElement = document.createElement('div');
+      movieElement.classList.add('movie');
+
+      const movieImage = document.createElement('img');
+      movieImage.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+      movieImage.alt = movie.title;
+      
+      movieElement.appendChild(movieImage);
+      moviesContainer.appendChild(movieElement);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  }
+
+    </script>
+  </body>
+  </html>
+  
